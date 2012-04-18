@@ -1,0 +1,51 @@
+[%# The contents of this file are subject to the Mozilla Public
+  # License Version 1.1 (the "License"); you may not use this file
+  # except in compliance with the License. You may obtain a copy of
+  # the License at http://www.mozilla.org/MPL/
+  #
+  # Software distributed under the License is distributed on an "AS
+  # IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  # implied. See the License for the specific language governing
+  # rights and limitations under the License.
+  #
+  # The Original Code is the HiddenNameAndMail Bugzilla Extension.
+  #
+  # The Initial Developer of the Original Code is Ali Ustek
+  # Portions created by the Initial Developer are Copyright (C) 2011 the
+  # Initial Developer. All Rights Reserved.
+  #
+  # Contributor(s): Ali Ustek <aliustek@gmail.com>
+  #%]
+
+[%# This is a list of messages to extend user errors. Please keep them in
+  # alphabetical order by error tag, and leave a blank line between errors.
+  #
+  # Note that you must explicitly filter every single template variable
+  # in this file; if you do not wish to change it, use the "none" filter.
+  #
+  # Note: be aware of uniqueness of error string parameter value, since
+  # nobody can guarantee the hook files processing order in the future.
+  #%]
+
+[% IF error == "hidden_email_exists" %]
+   [% title = "Hidden Email Already Exists" %]
+   There is already an account with
+   [% IF email %]
+     the hidden email [% email FILTER html %].
+   [% ELSE %]
+     that login name.
+   [% END %]
+    
+[% ELSIF error == "illegal_hidden_email_address" %]
+   [% title = "Invalid Hidden Email Address" %]
+   The hidden e-mail address you entered (<b>[% addr FILTER html %]</b>) 
+   didn't pass our syntax checking for a legal email address. 
+   [% IF default %]
+     A legal address must contain exactly one '@',
+     and at least one '.' after the @.
+   [% ELSE %]
+     [%Param('emailregexpdesc') %]
+   [% END %]
+   It must also not contain any of these special characters:
+   <tt>\ ( ) &amp; &lt; &gt; , ; : &quot; [ ]</tt>, or any whitespace.
+[% END %]
