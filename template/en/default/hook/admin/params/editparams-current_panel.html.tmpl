@@ -1,0 +1,35 @@
+[%# The contents of this file are subject to the Mozilla Public
+  # License Version 1.1 (the "License"); you may not use this file
+  # except in compliance with the License. You may obtain a copy of
+  # the License at http://www.mozilla.org/MPL/
+  #
+  # Software distributed under the License is distributed on an "AS
+  # IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  # implied. See the License for the specific language governing
+  # rights and limitations under the License.
+  #
+  # The Original Code is the HiddenNameAndMail Bugzilla Extension.
+  #
+  # The Initial Developer of the Original Code is Ali Ustek
+  # Portions created by the Initial Developer are Copyright (C) 2011 the
+  # Initial Developer. All Rights Reserved.
+  #
+  # Contributor(s):
+  #   Ali Ustek <aliustek@gmail.com>
+  #%]
+  
+[%# This is a list of parameter descriptions %]
+
+[% IF panel.name == "auth" %]
+    [%
+      panel.param_descs.hidden_email_regexp =
+                     'The number of consecutive passwords which
+                     are associated with a user account before
+                     an old password can be used. This
+                     feature is disabled if the value is set to 0.'
+
+      panel.param_descs.hidden_email_regexp_desc =
+                     'This describes in English words what kinds of legal hidden addresses
+                     are allowed by the <tt>hidden_email_regexp</tt> param.'
+    %]
+[% END %]

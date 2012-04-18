@@ -1,0 +1,77 @@
+=== modified file 'editusers.cgi'
+--- editusers.cgi	2011-08-29 23:23:40 +0000
++++ editusers.cgi	2012-01-23 15:48:41 +0000
+@@ -78,7 +78,7 @@
+     my $matchtype     = $cgi->param('matchtype');
+     my $grouprestrict = $cgi->param('grouprestrict') || '0';
+     my $query = 'SELECT DISTINCT userid, login_name, realname, is_enabled ' .
+-                'FROM profiles';
++                ',hidden_email, hidden_name FROM profiles';
+     my @bindValues;
+     my $nextCondition;
+     my $visibleGroups;
+@@ -133,6 +133,10 @@
+                 $expr = "profiles.userid";
+             } elsif ($matchvalue eq 'realname') {
+                 $expr = "profiles.realname";
++            } elsif ($matchvalue eq 'hidden_email') {
++                $expr = "profiles.hidden_email";
++            } elsif ($matchvalue eq 'hidden_name') {
++                $expr = "profiles.hidden_name";
+             } else {
+                 $expr = "profiles.login_name";
+             }
+@@ -215,6 +219,8 @@
+         disabledtext  => scalar $cgi->param('disabledtext'),
+         disable_mail  => scalar $cgi->param('disable_mail'),
+         extern_id     => scalar $cgi->param('extern_id'),
++        hidden_email  => scalar $cgi->param('hiddenemail'),
++        hidden_name   => scalar $cgi->param('hiddenname'),
+         });
+ 
+     userDataToVars($new_user->id);
+@@ -258,6 +264,8 @@
+             if $cgi->param('password');
+         $otherUser->set_disabledtext($cgi->param('disabledtext'));
+         $otherUser->set_disable_mail($cgi->param('disable_mail'));
++        $otherUser->set_hidden_email($cgi->param('hiddenemail'));
++        $otherUser->set_hidden_name($cgi->param('hiddenname'));
+         $otherUser->set_extern_id($cgi->param('extern_id'))
+             if defined($cgi->param('extern_id'));
+         $changes = $otherUser->update();
+
+=== modified file 'template/en/default/global/messages.html.tmpl'
+--- template/en/default/global/messages.html.tmpl	2011-11-26 00:13:18 +0000
++++ template/en/default/global/messages.html.tmpl	2012-01-23 15:48:41 +0000
+@@ -70,6 +70,8 @@
+               [% ELSE %]
+                 [% terms.Bug %]mail has been enabled.
+               [% END %]
++            [% ELSE %]
++              [% Hook.process('user_updated_fields') %]
+             [% END %]
+           </li>
+         [% END %]
+
+=== modified file 'token.cgi'
+--- token.cgi	2011-12-28 22:15:49 +0000
++++ token.cgi	2012-01-23 15:48:41 +0000
+@@ -370,13 +370,17 @@
+     my (undef, undef, $login_name) = Bugzilla::Token::GetTokenData($token);
+ 
+     my $password = $cgi->param('passwd1') || '';
++    my $hidden_mail = $cgi->param('hidden_mail') || '';
++    my $hidden_name = $cgi->param('hidden_name') || '';
+     validate_password($password, $cgi->param('passwd2') || '');
+     # Make sure that these never show up anywhere in the UI.
+     $cgi->delete('passwd1', 'passwd2');
+ 
+     my $otheruser = Bugzilla::User->create({
+         login_name => $login_name, 
++        hidden_email => $hidden_mail, 
+         realname   => $cgi->param('realname'), 
++        hidden_name => $hidden_name, 
+         cryptpassword => $password});
+ 
+     # Now delete this token.
+

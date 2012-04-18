@@ -1,0 +1,2 @@
+Adds Hidden NAME and EMAIL fields to User.  This will allow admins to map a dummy
+email account to users real email account and name
