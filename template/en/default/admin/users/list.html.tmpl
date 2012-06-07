@@ -119,12 +119,4 @@
   [% END %].
 </p>
 
-<form id="mass_email" action="editusers.cgi" method="GET">
-    [% IF users.size > 0%]
-        [% FOREACH thisuser = users %]
-            <input type="hidden" name="users" value="[% thisuser.userid FILTER html %]">
-        [% END %]
-        <input type="submit" name="massemail-new" value="Mass e-mail">
-  [% END %]
-</form>
 [% PROCESS global/footer.html.tmpl %]
