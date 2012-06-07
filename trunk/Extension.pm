@@ -172,6 +172,7 @@ sub hidden_name { $_[0]->{hidden_name}; }
 
 sub is_available_hidden_email {
     my ($hidden_email) = @_;
+    trick_taint($hidden_email);
     my @hiddenemail = Bugzilla->dbh->selectrow_array("SELECT hidden_email FROM profiles WHERE hidden_email='$hidden_email'");
     
     #if hiddenemail was renturned then return false
